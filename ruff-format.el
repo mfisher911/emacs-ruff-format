@@ -35,12 +35,19 @@
   :type 'string
   :group 'ruff-format)
 
+(defcustom ruff-format-args ""
+  "Ruff arguments."
+  :type 'string
+  :group 'ruff-format)
+
 ;;;###autoload (autoload 'ruff-format-buffer "ruff-format" nil t)
 ;;;###autoload (autoload 'ruff-format-region "ruff-format" nil t)
 ;;;###autoload (autoload 'ruff-format-on-save-mode "ruff-format" nil t)
 (reformatter-define ruff-format
   :program ruff-format-command
-  :args (list "format" "--stdin-filename" (or (buffer-file-name) input-file))
+  :args (flatten-tree (list
+                       "format" (split-string ruff-format-args)
+                       "--stdin-filename" (or (buffer-file-name) input-file)))
   :lighter " RuffFmt"
   :group 'ruff-format)
 
